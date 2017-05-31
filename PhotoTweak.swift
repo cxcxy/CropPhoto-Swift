@@ -143,6 +143,8 @@ class PhotoTweakView: UIView,UIScrollViewDelegate,CropViewDelegate {
     var currentCenterY: CGFloat = 0.0
     var originalPoint = CGPoint.zero
     var maxRotationAngle: CGFloat = 0.0
+    
+    var photoContentView: PhotoContentView!
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -157,7 +159,7 @@ class PhotoTweakView: UIView,UIScrollViewDelegate,CropViewDelegate {
         scrollView.alwaysBounceHorizontal           = true
         scrollView.delegate                         = self
         scrollView.minimumZoomScale                 = 1             // 最小缩放
-        scrollView.maximumZoomScale                 = 3             // 最大缩放
+        scrollView.maximumZoomScale                 = 1             // 最大缩放
         scrollView.showsVerticalScrollIndicator     = false
         scrollView.showsHorizontalScrollIndicator   = false
         scrollView.clipsToBounds                    = false
@@ -165,15 +167,15 @@ class PhotoTweakView: UIView,UIScrollViewDelegate,CropViewDelegate {
         scrollView.contentSize = CGSize(width: CGFloat((scrollView.bounds.size.width)), height: CGFloat((scrollView.bounds.size.height)))
         return scrollView
     }()
-    // 装载照片的View
-    lazy var photoContentView: PhotoContentView = {
-       let photoContentView = PhotoContentView.init(frame: self.scrollView.bounds, image: self.image)
-
-        photoContentView.backgroundColor            = UIColor.blue
-        photoContentView.isUserInteractionEnabled   = true
-        
-        return photoContentView
-    }()
+//    // 装载照片的View
+//    lazy var photoContentView: PhotoContentView = {
+//       let photoContentView = PhotoContentView.init(frame: self.scrollView.bounds, image: self.image)
+//
+//        photoContentView.backgroundColor            = UIColor.blue
+//        photoContentView.isUserInteractionEnabled   = true
+//        
+//        return photoContentView
+//    }()
     init(frame: CGRect, image: UIImage, maxRotationAngle: CGFloat) {
         super.init(frame: frame)
         self.frame = frame
@@ -195,6 +197,12 @@ class PhotoTweakView: UIView,UIScrollViewDelegate,CropViewDelegate {
 
         addSubview(scrollView)
 
+        photoContentView = PhotoContentView.init(frame: self.scrollView.bounds, image: self.image)
+        
+        photoContentView.backgroundColor            = UIColor.blue
+        photoContentView.isUserInteractionEnabled   = true
+        
+//        return photoContentView
         scrollView.photoContentView = photoContentView
         scrollView.addSubview(photoContentView)
         
@@ -415,27 +423,27 @@ class PhotoTweakView: UIView,UIScrollViewDelegate,CropViewDelegate {
         
     }
     // 正在缩放的代理方法  只要在缩放就执行该方法，所以此方法会在缩放过程中多次调用
-
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-            //    self.photoContentView.center = scrollView.center;
-            //    self.photoContentView.center = CGPointMake(CX_W / 2 , 395 / 2 );
-        let x: CGFloat = self.scrollView.frame.origin.x
-        let y: CGFloat = self.scrollView.frame.origin.y
-        let w: CGFloat = self.scrollView.frame.size.width
-        let h: CGFloat = self.scrollView.frame.size.height
-        let c_x: CGFloat = self.scrollView.center.x
-        let c_y: CGFloat = self.scrollView.center.y
-//        let contentSize_w: CGFloat = self.scrollView!.contentSize.width
-//        let contentSize_h: CGFloat = self.scrollView!.contentSize.height
-        print(String(format: "%.0f-%.0f-%.0f-%.0f", x, y, w, h))
-        print(String(format: "%.0f=%.0f", c_x, c_y))
-        //    if (contentSize_w < CX_W) {
-        ////        self.scrollView.contentSize.width == CX_W;
-        //        [self.scrollView setContentSize:CGSizeMake(CX_W, contentSize_h)];
-        //    }
-        //    
-        //    NSLog(@"%.0f=%.0f",contentSize_w,contentSize_h);
-    }
+//
+//    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+//            //    self.photoContentView.center = scrollView.center;
+//            //    self.photoContentView.center = CGPointMake(CX_W / 2 , 395 / 2 );
+//        let x: CGFloat = self.scrollView.frame.origin.x
+//        let y: CGFloat = self.scrollView.frame.origin.y
+//        let w: CGFloat = self.scrollView.frame.size.width
+//        let h: CGFloat = self.scrollView.frame.size.height
+//        let c_x: CGFloat = self.scrollView.center.x
+//        let c_y: CGFloat = self.scrollView.center.y
+////        let contentSize_w: CGFloat = self.scrollView!.contentSize.width
+////        let contentSize_h: CGFloat = self.scrollView!.contentSize.height
+//        print(String(format: "%.0f-%.0f-%.0f-%.0f", x, y, w, h))
+//        print(String(format: "%.0f=%.0f", c_x, c_y))
+//        //    if (contentSize_w < CX_W) {
+//        ////        self.scrollView.contentSize.width == CX_W;
+//        //        [self.scrollView setContentSize:CGSizeMake(CX_W, contentSize_h)];
+//        //    }
+//        //    
+//        //    NSLog(@"%.0f=%.0f",contentSize_w,contentSize_h);
+//    }
 // MARK: - Crop View Delegate
 
     func cropMoved(_ cropView: CropView) {
@@ -658,7 +666,6 @@ class PhotoTweakView: UIView,UIScrollViewDelegate,CropViewDelegate {
 
     func photoTranslation() -> CGPoint {
         let rect: CGRect? = photoContentView.convert((photoContentView.bounds), to: self)
-//            photoContentView?.convertRect(photoContentView?.bounds, to: self)
         let point = CGPoint(x: CGFloat((rect?.origin.x)! + (rect?.size.width)! / 2), y: CGFloat((rect?.origin.y)! + (rect?.size.height)! / 2))
         let zeroPoint = CGPoint(x: CGFloat(frame.width / 2), y: currentCenterY)
         return CGPoint(x: CGFloat(point.x - zeroPoint.x), y: CGFloat(point.y - zeroPoint.y))

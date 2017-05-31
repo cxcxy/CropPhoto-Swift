@@ -82,7 +82,7 @@ class CropView: UIView {
         }
         let animationBlock: ((_: Void) -> Void)? = {(_: Void) -> Void in
             self.updateLines(self.horizontalGridLines, horizontal: true)
-            //        [self updateLines:self.verticalGridLines horizontal:NO];
+
         }
         if animate {
             UIView.animate(withDuration: 0.25, animations: animationBlock!)
@@ -111,14 +111,14 @@ class CropView: UIView {
             self.dismissLines(self.horizontalCropLines)
             self.dismissLines(self.verticalCropLines)
         }, completion: {(_ finished: Bool) -> Void in
-            //        self.cropLinesDismissed = YES;
+
         })
     }
     
     func dismissGridLines() {
         UIView.animate(withDuration: 0.2, animations: {() -> Void in
             self.dismissLines(self.horizontalGridLines)
-            //        [self dismissLines:self.verticalGridLines];
+
         }, completion: {(_ finished: Bool) -> Void in
             self.isGridLinesDismissed = true
         })
@@ -132,7 +132,7 @@ class CropView: UIView {
     }
     
     func showCropLines() {
-        //    self.cropLinesDismissed = NO;
+
         UIView.animate(withDuration: 0.2, animations: {() -> Void in
             self.showLines(self.horizontalCropLines)
             self.showLines(self.verticalCropLines)
@@ -143,7 +143,7 @@ class CropView: UIView {
         isGridLinesDismissed = false
         UIView.animate(withDuration: 0.2, animations: {() -> Void in
             self.showLines(self.horizontalGridLines)
-            //        [self showLines:self.verticalGridLines];
+ 
         })
     }
     
